@@ -2,16 +2,58 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
+import { useAuth, useUser } from '@clerk/nextjs'
+import { doc, setDoc } from 'firebase/firestore'
+import { v4 as uuidv4 } from 'uuid'
 
+import { db } from '@/config/firebaseConfig'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import CoverModal from '@/app/_components/CoverModal'
 import { EmojiSelector } from '@/app/_components/EmojiSelector'
 
 const SetupWorkspace = () => {
+  const [loading, setLoading] = useState(false)
   const [image, setImage] = useState('/images/cover.png')
   const [workspaceName, setWorkspaceName] = useState('')
   const [emojiIcon, setEmojiIcon] = useState(null)
+  const { user } = useUser()
+  const { orgId } = useAuth()
+  const router = useRouter()
+
+  const createWorkspace = async () => {
+    setLoading(true)
+    const workspaceID = Date.now().toString()
+
+    const result = await setDoc(doc(db, 'workspaces', workspaceID), {
+      id: workspaceID,
+      name: workspaceName,
+      cover: image,
+      emoji: emojiIcon,
+      owner: user?.primaryEmailAddress?.emailAddress,
+      organization: orgId ? orgId : user?.primaryEmailAddress?.emailAddress,
+    })
+
+    const documentID = uuidv4()
+    await setDoc(doc(db, 'documents', documentID), {
+      id: documentID,
+      workspaceID: workspaceID,
+      owner: user?.primaryEmailAddress?.emailAddress,
+      name: 'Untitled Document',
+      cover: null,
+      emoji: null,
+      documentOutput: [],
+    })
+
+    await setDoc(doc(db, 'documentOutput', documentID), {
+      id: documentID,
+      output: [],
+    })
+
+    router.replace(`/workspace/${workspaceID}/${documentID}`)
+    setLoading(false)
+  }
 
   return (
     <div className="container px-6 py-20 md:px-20 lg:px-36 xl:px-48">
@@ -50,7 +92,12 @@ const SetupWorkspace = () => {
             />
           </div>
           <div className="mt-6 flex justify-end gap-4">
-            <Button disabled={!workspaceName.length}>Create</Button>
+            <Button
+              onClick={createWorkspace}
+              disabled={!workspaceName.length || loading}
+            >
+              Create
+            </Button>
             <Button variant="outline">Cancel</Button>
           </div>
         </div>
