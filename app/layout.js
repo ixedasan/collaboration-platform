@@ -1,5 +1,6 @@
 import { Nunito } from 'next/font/google'
 import { ClerkProvider } from '@clerk/nextjs'
+import { Toaster } from 'sonner'
 
 import './globals.css'
 
@@ -16,7 +17,10 @@ export default function RootLayout({ children }) {
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={nunito.className}>{children}</body>
+        <body className={nunito.className}>
+          <Toaster position="top-right"/>
+          {children}
+        </body>
       </html>
     </ClerkProvider>
   )
