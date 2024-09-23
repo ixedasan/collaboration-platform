@@ -14,7 +14,11 @@ export const EmojiSelector = memo(({ setEmojiIcon, emojiIcon }) => {
   return (
     <div className="relative">
       <Button variant="outline" className="p-2" onClick={togglePicker}>
-        {emojiIcon ? emojiIcon : <SmilePlusIcon className="text-primary" />}
+        {emojiIcon ? (
+          <span className="text-xl">{emojiIcon}</span>
+        ) : (
+          <SmilePlusIcon className="text-primary" />
+        )}
       </Button>
       {openEmojiPicker && (
         <div className="absolute z-10 mt-2">

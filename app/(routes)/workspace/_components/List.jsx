@@ -24,6 +24,7 @@ const List = ({ params, documents }) => {
       {documents.map(doc => (
         <div
           key={doc?.id}
+          tabIndex={0}
           onClick={() => handleClick(doc?.id)}
           className={`mt-3 flex cursor-pointer items-center justify-between rounded-lg p-2 px-3 hover:bg-primary/10 ${doc?.id === params?.documentid && 'bg-gray-100'} `}
         >
