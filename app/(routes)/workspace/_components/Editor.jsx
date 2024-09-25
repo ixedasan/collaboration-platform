@@ -44,34 +44,23 @@ const Editor = ({ params }) => {
   const fetchDocumentOutput = () => {
     const documentRef = doc(db, 'documentOutput', params?.documentid)
 
-    const unsubscribe = onSnapshot(documentRef, doc => {
-      const documentData = doc.data()
+    return onSnapshot(documentRef, doc => {
+      const { output, editedBy } = doc.data() || {}
 
-      if (documentData) {
-        const output = documentData?.output
+      if (!output) return
 
-        if (typeof output === 'string' && output.trim()) {
-          try {
-            const parsedOutput = JSON.parse(output)
+      try {
+        const parsedOutput = JSON.parse(output)
+        const isNewEdit = editedBy !== user?.primaryEmailAddress?.emailAddress
 
-            if (
-              documentData?.editedBy !==
-                user?.primaryEmailAddress?.emailAddress ||
-              !isFetchedRef.current
-            ) {
-              editorRef.current?.render(parsedOutput)
-              isFetchedRef.current = true
-            }
-          } catch (error) {
-            console.error('Ошибка парсинга JSON:', error)
-          }
-        } else {
-          console.warn('Output пуст или не является строкой')
+        if (isNewEdit || !isFetchedRef.current) {
+          editorRef.current?.render(parsedOutput)
+          isFetchedRef.current = true
         }
+      } catch (error) {
+        console.error('Error parsing document output:', error)
       }
     })
-
-    return () => unsubscribe()
   }
 
   const initializeEditor = () => {
