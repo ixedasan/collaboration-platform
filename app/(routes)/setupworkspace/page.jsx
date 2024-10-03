@@ -26,34 +26,45 @@ const SetupWorkspace = () => {
     setLoading(true)
     const workspaceID = Date.now().toString()
 
-    const result = await setDoc(doc(db, 'workspaces', workspaceID), {
-      id: workspaceID,
-      name: workspaceName,
-      cover: image,
-      emoji: emojiIcon,
-      owner: user?.primaryEmailAddress?.emailAddress,
-      organization: orgId ? orgId : user?.primaryEmailAddress?.emailAddress,
-    })
+    try {
+      await setDoc(doc(db, 'workspaces', workspaceID), {
+        id: workspaceID,
+        name: workspaceName,
+        cover: image,
+        emoji: emojiIcon,
+        owner: user?.primaryEmailAddress?.emailAddress,
+        organization: orgId ? orgId : user?.primaryEmailAddress?.emailAddress,
+      })
 
-    const documentID = uuidv4()
-    await setDoc(doc(db, 'documents', documentID), {
-      id: documentID,
-      workspaceID: workspaceID,
-      owner: user?.primaryEmailAddress?.emailAddress,
-      name: 'Untitled Document',
-      cover: null,
-      emoji: null,
-      documentOutput: [],
-    })
+      const documentID = uuidv4()
+      await setDoc(doc(db, 'documents', documentID), {
+        id: documentID,
+        workspaceID: workspaceID,
+        owner: user?.primaryEmailAddress?.emailAddress,
+        name: 'Untitled Document',
+        cover: null,
+        emoji: null,
+        documentOutput: [],
+      })
 
-    await setDoc(doc(db, 'documentOutput', documentID), {
-      id: documentID,
-      output: [],
-    })
+      await setDoc(doc(db, 'documentOutput', documentID), {
+        id: documentID,
+        output: [],
+      })
 
-    router.replace(`/workspace/${workspaceID}/${documentID}`)
-    setLoading(false)
+      router.replace(`/workspace/${workspaceID}/${documentID}`)
+    } catch (error) {
+      console.error('Error creating workspace:', error)
+    } finally {
+      setLoading(false)
+    }
   }
+
+  const handleCancel = () => {
+    router.back()
+  }
+
+  const isCreateDisabled = !workspaceName.trim().length || loading
 
   return (
     <div className="container px-6 py-20 md:px-20 lg:px-36 xl:px-48">
@@ -92,13 +103,12 @@ const SetupWorkspace = () => {
             />
           </div>
           <div className="mt-6 flex justify-end gap-4">
-            <Button
-              onClick={createWorkspace}
-              disabled={!workspaceName.length || loading}
-            >
-              Create
+            <Button onClick={createWorkspace} disabled={isCreateDisabled}>
+              {loading ? 'Creating...' : 'Create'}
             </Button>
-            <Button variant="outline">Cancel</Button>
+            <Button variant="outline" onClick={handleCancel}>
+              Cancel
+            </Button>
           </div>
         </div>
       </div>
