@@ -1,6 +1,7 @@
 import { Nunito } from 'next/font/google'
 import { ClerkProvider } from '@clerk/nextjs'
 import { Toaster } from 'sonner'
+import "@liveblocks/react-ui/styles.css";
 
 import './globals.css'
 
