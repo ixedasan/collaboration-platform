@@ -9,40 +9,44 @@ import { collection, getDocs, query, where } from 'firebase/firestore'
 
 import { db } from '@/config/firebaseConfig'
 
+const getUsersFromFirestore = async userIds => {
+  const q = query(collection(db, 'users'), where('email', 'in', userIds))
+  const querySnapshot = await getDocs(q)
+  return querySnapshot.docs.map(doc => doc.data())
+}
+
+const getMentionSuggestions = async text => {
+  const q = query(collection(db, 'users'), where('email', '!=', null))
+  const querySnapshot = await getDocs(q)
+  let userList = querySnapshot.docs.map(doc => doc.data())
+
+  if (text) {
+    userList = userList.filter(user =>
+      user.name.toLowerCase().includes(text.toLowerCase()),
+    )
+  }
+
+  return userList.map(user => user.email)
+}
+
 export function Room({ children, params }) {
+  const roomId = params?.documentid || '1'
+
+  const resolveUsers = async ({ userIds }) => {
+    return await getUsersFromFirestore(userIds)
+  }
+
+  const resolveMentionSuggestions = async ({ text }) => {
+    return await getMentionSuggestions(text)
+  }
+
   return (
     <LiveblocksProvider
-      authEndpoint={'/api/liveblocks-auth?roomId=' + params?.documentid}
-      resolveUsers={async ({ userIds }) => {
-        const q = query(collection(db, 'users'), where('email', 'in', userIds))
-        const querySnapshot = await getDocs(q)
-        const userList = []
-        querySnapshot.forEach(doc => {
-          console.log(doc.data())
-          userList.push(doc.data())
-        })
-        return userList
-      }}
-      resolveMentionSuggestions={async ({ text, roomId }) => {
-        const q = query(collection(db, 'users'), where('email', '!=', null))
-        const querySnapshot = await getDocs(q)
-        let userList = []
-        querySnapshot.forEach(doc => {
-          userList.push(doc.data())
-        })
-        console.log(userList)
-
-        if (text) {
-          // Filter any way you'd like, e.g. checking if the name matches
-          userList = userList.filter(user => user.name.includes(text))
-        }
-        console.log(userList.map(user => user.email))
-
-        // Return a list of user IDs that match the query
-        return userList.map(user => user.email)
-      }}
+      authEndpoint={`/api/liveblocks-auth?roomId=${roomId}`}
+      resolveUsers={resolveUsers}
+      resolveMentionSuggestions={resolveMentionSuggestions}
     >
-      <RoomProvider id={params?.documentid ? params?.documentid : '1'}>
+      <RoomProvider id={roomId}>
         <ClientSideSuspense fallback={<div>Loading…</div>}>
           {children}
         </ClientSideSuspense>
