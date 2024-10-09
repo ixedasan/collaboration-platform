@@ -1,5 +1,3 @@
-'use client'
-
 import { useEffect, useRef, useState } from 'react'
 import { useUser } from '@clerk/nextjs'
 import Checklist from '@editorjs/checklist'
@@ -122,8 +120,8 @@ const Editor = ({ params }) => {
   }
 
   return (
-    <div className="ml-20">
-      <div id="editorjs" className="" />
+    <div className="mx-auto w-full max-w-screen-xl px-4">
+      <div id="editorjs" className="editor-wrapper min-h-screen w-full" />
     </div>
   )
 }

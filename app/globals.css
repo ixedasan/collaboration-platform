@@ -67,3 +67,55 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* EditorJS styles */
+.editor-wrapper {
+  @apply relative;
+}
+
+.codex-editor {
+  @apply w-full;
+}
+
+.ce-block__content {
+  @apply ml-10 mr-10 max-w-full;
+}
+
+.ce-toolbar__content {
+  @apply max-w-full;
+}
+
+.ce-toolbar__actions {
+  @apply left-[-30px] right-auto;
+}
+
+.ce-toolbar__plus {
+  @apply left-[-30px];
+}
+
+.ce-toolbar__settings-btn {
+  @apply left-[-30px] right-auto;
+}
+
+.codex-editor__redactor {
+  @apply pl-0 pr-0;
+}
+
+h1.ce-header {
+  @apply text-3xl font-bold;
+}
+h2.ce-header {
+  @apply text-2xl font-semibold;
+}
+h3.ce-header {
+  @apply text-xl font-semibold;
+}
+h4.ce-header {
+  @apply text-lg font-semibold;
+}
+h5.ce-header {
+  @apply text-base font-semibold;
+}
+h6.ce-header {
+  @apply text-base font-semibold;
+}
