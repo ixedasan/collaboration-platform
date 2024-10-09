@@ -21,6 +21,7 @@ import { Progress } from '@/components/ui/progress'
 import Logo from '@/app/_components/Logo'
 
 import List from './List'
+import Notification from './Notification'
 
 const MAX_DOCUMENTS_COUNT = process.env.NEXT_PUBLIC_MAX_DOCUMENTS_COUNT
 
@@ -85,7 +86,9 @@ const SideNavbar = ({ params }) => {
     <div className="fixed hidden h-screen p-5 shadow-md md:block md:w-72">
       <div className="flex items-center justify-between border-b pb-5">
         <Logo />
-        <Bell />
+        <Notification>
+          <Bell />
+        </Notification>
       </div>
       <div className="my-6 flex items-center justify-between">
         <h2 className="font-semibold">Workspace Name</h2>

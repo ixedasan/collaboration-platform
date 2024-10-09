@@ -123,7 +123,7 @@ const Editor = ({ params }) => {
 
   return (
     <div className="ml-20">
-      <div id="editorjs" className="w-[70%]" />
+      <div id="editorjs" className="" />
     </div>
   )
 }
