@@ -9,6 +9,8 @@ import { collection, getDocs, query, where } from 'firebase/firestore'
 
 import { db } from '@/config/firebaseConfig'
 
+import Loader from './_components/Loader'
+
 const getUsersFromFirestore = async userIds => {
   const q = query(collection(db, 'users'), where('email', 'in', userIds))
   const querySnapshot = await getDocs(q)
@@ -47,7 +49,7 @@ export function Room({ children, params }) {
       resolveMentionSuggestions={resolveMentionSuggestions}
     >
       <RoomProvider id={roomId}>
-        <ClientSideSuspense fallback={<div>Loading…</div>}>
+        <ClientSideSuspense fallback={<Loader />}>
           {children}
         </ClientSideSuspense>
       </RoomProvider>
