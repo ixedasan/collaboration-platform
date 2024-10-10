@@ -14,8 +14,10 @@ import {
   where,
 } from 'firebase/firestore'
 import { AlignLeft, LayoutGrid } from 'lucide-react'
+import { toast } from 'sonner'
 
 import { Button } from '@/components/ui/button'
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 
 import Item from './Item'
 
@@ -23,6 +25,7 @@ const List = () => {
   const { user } = useUser()
   const { orgId } = useAuth()
   const [workspaceList, setWorkspaceList] = useState([])
+  const [layout, setLayout] = useState('grid')
 
   const fetchWorkspaceList = useCallback(() => {
     if (!user) return
@@ -50,7 +53,7 @@ const List = () => {
   const handleDelete = async id => {
     try {
       await deleteDoc(doc(db, 'workspaces', id))
-      console.log('Workspace deleted successfully')
+      toast('Workspace deleted successfully')
     } catch (error) {
       console.error('Error deleting workspace:', error)
     }
@@ -66,10 +69,18 @@ const List = () => {
       </div>
       <div className="mt-10 flex justify-between">
         <h2 className="font-medium text-primary">Workspaces</h2>
-        <div className="flex gap-2">
-          <LayoutGrid />
-          <AlignLeft />
-        </div>
+        <ToggleGroup
+          type="single"
+          value={layout}
+          onValueChange={value => value && setLayout(value)}
+        >
+          <ToggleGroupItem value="grid" aria-label="Grid layout">
+            <LayoutGrid className="h-4 w-4" />
+          </ToggleGroupItem>
+          <ToggleGroupItem value="list" aria-label="List layout">
+            <AlignLeft className="h-4 w-4" />
+          </ToggleGroupItem>
+        </ToggleGroup>
       </div>
       {workspaceList.length === 0 ? (
         <div className="my-10 flex flex-col items-center justify-center">
@@ -86,7 +97,11 @@ const List = () => {
           </Link>
         </div>
       ) : (
-        <Item workspaceList={workspaceList} onDelete={handleDelete} />
+        <Item
+          workspaceList={workspaceList}
+          onDelete={handleDelete}
+          layout={layout}
+        />
       )}
     </div>
   )

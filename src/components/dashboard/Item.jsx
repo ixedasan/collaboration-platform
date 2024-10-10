@@ -15,7 +15,7 @@ import {
 
 import DeleteConfirmationModal from './DeleteConfirmationModal'
 
-const Item = memo(({ workspaceList, onDelete }) => {
+const Item = memo(({ workspaceList, onDelete, layout }) => {
   const router = useRouter()
   const [deleteModalOpen, setDeleteModalOpen] = useState(false)
   const [workspaceToDelete, setWorkspaceToDelete] = useState(null)
@@ -35,53 +35,90 @@ const Item = memo(({ workspaceList, onDelete }) => {
     }
   }
 
+  const GridLayout = () => (
+    <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+      {workspaceList?.map(workspace => (
+        <div
+          key={workspace.id}
+          className="relative overflow-hidden rounded-xl border shadow-xl transition-all hover:scale-105"
+        >
+          <div
+            className="cursor-pointer"
+            onClick={() => onClickRoute(workspace.id)}
+            tabIndex={0}
+          >
+            <div className="relative h-0 pb-[56.25%]">
+              <Image
+                src={workspace.cover}
+                alt={`${workspace.name} cover`}
+                layout="fill"
+                objectFit="cover"
+                className="rounded-t-xl"
+              />
+            </div>
+            <div className="rounded-b-xl p-3 sm:p-4">
+              <h2 className="flex items-center gap-2 text-sm sm:text-base">
+                <span className="text-lg sm:text-xl">{workspace.emoji}</span>
+                <span className="truncate">{workspace.name}</span>
+              </h2>
+            </div>
+          </div>
+          <div className="absolute right-2 top-2">
+            <WorkspaceMenu workspace={workspace} />
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+
+  const ListLayout = () => (
+    <div className="mt-6 space-y-4">
+      {workspaceList?.map(workspace => (
+        <div
+          key={workspace.id}
+          className="flex cursor-pointer items-center justify-between rounded-xl border p-4 shadow-md transition-all hover:bg-gray-50"
+          onClick={() => onClickRoute(workspace.id)}
+          tabIndex={0}
+        >
+          <div className="flex items-center space-x-4">
+            <div className="relative h-16 w-16 overflow-hidden rounded-lg">
+              <Image
+                src={workspace.cover}
+                alt={`${workspace.name} cover`}
+                layout="fill"
+                objectFit="cover"
+              />
+            </div>
+            <h2 className="flex items-center gap-2 text-lg">
+              <span>{workspace.emoji}</span>
+              <span>{workspace.name}</span>
+            </h2>
+          </div>
+          <WorkspaceMenu workspace={workspace} />
+        </div>
+      ))}
+    </div>
+  )
+
+  const WorkspaceMenu = ({ workspace }) => (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" className="h-8 w-8 p-0">
+          <MoreVertical className="h-4 w-4" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem onClick={() => handleDeleteClick(workspace)}>
+          <Trash2 className="mr-2 h-4 w-4" />
+          <span>Delete</span>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
+
   return (
     <>
-      <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        {workspaceList?.map(workspace => (
-          <div
-            key={workspace.id}
-            className="relative overflow-hidden rounded-xl border shadow-xl transition-all hover:scale-105"
-          >
-            <div
-              className="cursor-pointer"
-              onClick={() => onClickRoute(workspace.id)}
-            >
-              <div className="relative h-0 pb-[56.25%]">
-                <Image
-                  src={workspace.cover}
-                  alt={`${workspace.name} cover`}
-                  layout="fill"
-                  objectFit="cover"
-                  className="rounded-t-xl"
-                />
-              </div>
-              <div className="rounded-b-xl p-3 sm:p-4">
-                <h2 className="flex items-center gap-2 text-sm sm:text-base">
-                  <span className="text-lg sm:text-xl">{workspace.emoji}</span>
-                  <span className="truncate">{workspace.name}</span>
-                </h2>
-              </div>
-            </div>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  className="absolute right-2 top-2 h-8 w-8 p-0"
-                >
-                  <MoreVertical className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => handleDeleteClick(workspace)}>
-                  <Trash2 className="mr-2 h-4 w-4" />
-                  <span>Delete</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        ))}
-      </div>
+      {layout === 'grid' ? <GridLayout /> : <ListLayout />}
       <DeleteConfirmationModal
         isOpen={deleteModalOpen}
         onClose={() => setDeleteModalOpen(false)}
