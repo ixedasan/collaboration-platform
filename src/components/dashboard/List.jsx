@@ -4,10 +4,17 @@ import { useCallback, useEffect, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useAuth, useUser } from '@clerk/nextjs'
-import { collection, onSnapshot, query, where } from 'firebase/firestore'
+import { db } from '@config/firebaseConfig'
+import {
+  collection,
+  deleteDoc,
+  doc,
+  onSnapshot,
+  query,
+  where,
+} from 'firebase/firestore'
 import { AlignLeft, LayoutGrid } from 'lucide-react'
 
-import { db } from '@config/firebaseConfig'
 import { Button } from '@/components/ui/button'
 
 import Item from './Item'
@@ -40,6 +47,15 @@ const List = () => {
     return () => unsubscribe && unsubscribe()
   }, [fetchWorkspaceList])
 
+  const handleDelete = async id => {
+    try {
+      await deleteDoc(doc(db, 'workspaces', id))
+      console.log('Workspace deleted successfully')
+    } catch (error) {
+      console.error('Error deleting workspace:', error)
+    }
+  }
+
   return (
     <div className="container my-10 p-10">
       <div className="flex justify-between">
@@ -70,7 +86,7 @@ const List = () => {
           </Link>
         </div>
       ) : (
-        <Item workspaceList={workspaceList} />
+        <Item workspaceList={workspaceList} onDelete={handleDelete} />
       )}
     </div>
   )
