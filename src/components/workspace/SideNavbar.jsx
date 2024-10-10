@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useUser } from '@clerk/nextjs'
+import { db } from '@config/firebaseConfig'
 import {
   collection,
   doc,
@@ -15,11 +16,10 @@ import { Bell, Loader } from 'lucide-react'
 import { toast } from 'sonner'
 import { v4 as uuidv4 } from 'uuid'
 
-import { db } from '@/config/firebaseConfig'
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
-import Logo from '@/app/_components/Logo'
 
+import Logo from '../Logo'
 import List from './List'
 import Notification from './Notification'
 

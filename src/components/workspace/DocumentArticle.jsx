@@ -4,9 +4,10 @@ import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { doc, getDoc, updateDoc } from 'firebase/firestore'
 
-import { db } from '@/config/firebaseConfig'
-import CoverModal from '@/app/_components/CoverModal'
-import { EmojiSelector } from '@/app/_components/EmojiSelector'
+import { db } from '@config/firebaseConfig'
+import CoverModal from "../CoverModal"
+import { EmojiSelector } from "../EmojiSelector"
+
 
 const DocumentArticle = ({ params }) => {
   const [image, setImage] = useState('/images/cover.png')

@@ -12,7 +12,7 @@ import Alert from 'editorjs-alert'
 import { doc, onSnapshot, updateDoc } from 'firebase/firestore'
 import SimpleImage from 'simple-image-editorjs'
 
-import { db } from '@/config/firebaseConfig'
+import { db } from '@config/firebaseConfig'
 
 const Editor = ({ params }) => {
   const editorRef = useRef(null)

@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
+import ImageCover from '@/assets/ImageCover'
 import { DialogClose } from '@radix-ui/react-dialog'
 
 import { Button } from '@/components/ui/button'
@@ -14,8 +15,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-
-import ImageCover from '../_assets/ImageCover'
 
 function CoverModal({ children, setNewCover }) {
   const [selectedCover, setSelectedCover] = useState(null)

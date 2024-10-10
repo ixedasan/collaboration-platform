@@ -1,5 +1,5 @@
-import Header from './_components/Header'
-import List from './_components/List'
+import Header from '@/components/dashboard/Header'
+import List from '@/components/dashboard/List'
 
 const Dashboard = () => {
   return (

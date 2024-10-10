@@ -7,7 +7,7 @@ import { useAuth, useUser } from '@clerk/nextjs'
 import { collection, onSnapshot, query, where } from 'firebase/firestore'
 import { AlignLeft, LayoutGrid } from 'lucide-react'
 
-import { db } from '@/config/firebaseConfig'
+import { db } from '@config/firebaseConfig'
 import { Button } from '@/components/ui/button'
 
 import Item from './Item'

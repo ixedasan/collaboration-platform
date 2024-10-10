@@ -1,9 +1,16 @@
-import { Room } from '@/app/Room'
+'use client'
 
-import Main from '../../_components/Main'
-import SideNavbar from '../../_components/SideNavbar'
+import { useEffect } from 'react'
+
+import { Room } from '@/components/Room'
+import Main from '@/components/workspace/Main'
+import SideNavbar from '@/components/workspace/SideNavbar'
 
 const Document = ({ params }) => {
+  useEffect(() => {
+    console.log(params)
+  }, [])
+
   return (
     <Room params={params}>
       <div>

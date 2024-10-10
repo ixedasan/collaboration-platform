@@ -1,5 +1,5 @@
-import { Room } from "@/app/Room"
-import SideNavbar from '../_components/SideNavbar'
+import { Room } from '@/components/Room'
+import SideNavbar from '@/components/workspace/SideNavbar'
 
 const Workspace = ({ params }) => {
   return (

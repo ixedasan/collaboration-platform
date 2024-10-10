@@ -3,7 +3,7 @@ import { deleteDoc, doc } from 'firebase/firestore'
 import { FileText } from 'lucide-react'
 import { toast } from 'sonner'
 
-import { db } from '@/config/firebaseConfig'
+import { db } from '@config/firebaseConfig'
 
 import DocumentOptions from './DocumentOptions'
 

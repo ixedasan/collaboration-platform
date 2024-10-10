@@ -4,14 +4,14 @@ import { useState } from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useAuth, useUser } from '@clerk/nextjs'
+import { db } from '@config/firebaseConfig'
 import { doc, setDoc } from 'firebase/firestore'
 import { v4 as uuidv4 } from 'uuid'
 
-import { db } from '@/config/firebaseConfig'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import CoverModal from '@/app/_components/CoverModal'
-import { EmojiSelector } from '@/app/_components/EmojiSelector'
+import CoverModal from '@/components/CoverModal'
+import { EmojiSelector } from '@/components/EmojiSelector'
 
 const SetupWorkspace = () => {
   const [loading, setLoading] = useState(false)

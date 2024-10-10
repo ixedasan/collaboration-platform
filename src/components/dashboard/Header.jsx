@@ -9,8 +9,8 @@ import {
 } from '@clerk/nextjs'
 import { doc, setDoc } from 'firebase/firestore'
 
-import { db } from '@/config/firebaseConfig'
-import Logo from '@/app/_components/Logo'
+import { db } from '@config/firebaseConfig'
+import Logo from "../Logo"
 
 const Header = () => {
   const { orgId } = useAuth()

@@ -1,5 +1,6 @@
 'use client'
 
+import Loader from '@components/Loader'
 import {
   ClientSideSuspense,
   LiveblocksProvider,
@@ -7,9 +8,7 @@ import {
 } from '@liveblocks/react/suspense'
 import { collection, getDocs, query, where } from 'firebase/firestore'
 
-import { db } from '@/config/firebaseConfig'
-
-import Loader from './_components/Loader'
+import { db } from '@config/firebaseConfig'
 
 const getUsersFromFirestore = async userIds => {
   const q = query(collection(db, 'users'), where('email', 'in', userIds))
