@@ -27,6 +27,20 @@ const List = () => {
   const [workspaceList, setWorkspaceList] = useState([])
   const [layout, setLayout] = useState('grid')
 
+  useEffect(() => {
+    const savedLayout = localStorage.getItem('workspaceLayout')
+    if (savedLayout) {
+      setLayout(savedLayout)
+    }
+  }, [])
+
+  const handleLayoutChange = value => {
+    if (value) {
+      setLayout(value)
+      localStorage.setItem('workspaceLayout', value)
+    }
+  }
+
   const fetchWorkspaceList = useCallback(() => {
     if (!user) return
 
@@ -72,7 +86,7 @@ const List = () => {
         <ToggleGroup
           type="single"
           value={layout}
-          onValueChange={value => value && setLayout(value)}
+          onValueChange={handleLayoutChange}
         >
           <ToggleGroupItem value="grid" aria-label="Grid layout">
             <LayoutGrid className="h-4 w-4" />
